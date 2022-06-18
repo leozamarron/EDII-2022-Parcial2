@@ -22,10 +22,12 @@ int main() {
   return 0;
 }
 
+//Inicializa la lista
 void iniLista(LISTA *cab) {
   *cab = NULL;
 }
 
+//Crea un nuevo nodo
 int creaNodo(LISTA *cab, int dato) {
   int res = 0;
   *cab = (LISTA)malloc(sizeof(struct nodo));
@@ -38,6 +40,7 @@ int creaNodo(LISTA *cab, int dato) {
   return res;
 }
 
+//Inserta al inicio de la lista de forma iterativa
 int insIni(LISTA *cab, int dato) {
   int res = 0;
   LISTA nuevo;
@@ -49,6 +52,7 @@ int insIni(LISTA *cab, int dato) {
   return res;
 }
 
+//captura los elemmentos de la lista y los inserta en la lista al inicio
 int capturaLista(LISTA *cab) {
   int res, dato;
   char resP;
@@ -65,20 +69,23 @@ int capturaLista(LISTA *cab) {
   return res;
 }
 
+//Muestra la lista de forma iterativa
 void muestraLista(LISTA cab) 
 {
   for(; cab; cab = cab->puntero)
     printf("%d ", cab->clientes);
 }
 
-int cuentaLista(LISTA cab) //Peso - cantidad de elementos
+//Peso - cantidad de elementos
+int cuentaLista(LISTA cab) 
 {
   int i = 0;
   for(; cab; i++, cab = cab->puntero);
   return i;
 }
 
-int costo(LISTA cab) //Costo - suma iterativo
+//Costo - suma iterativo
+int costo(LISTA cab) 
 {
   int suma = 0;
 
@@ -87,7 +94,8 @@ int costo(LISTA cab) //Costo - suma iterativo
   return suma;
 }
 
-void costoListaCadena(LISTA cab, char *frase) // para juntar cadenas
+// para juntar cadenas
+void costoListaCadena(LISTA cab, char *frase) 
 {
   frase[0] = '/0';
   while (cab)
@@ -98,7 +106,8 @@ void costoListaCadena(LISTA cab, char *frase) // para juntar cadenas
   }
 }
 
-int buscaLista(LISTA cab, int buscado) // busca la lista de forma iterativa
+// busca la lista de forma iterativa
+int buscaLista(LISTA cab, int buscado)
 {
   int res = 0;
   while (cab && buscado != cab->clientes)
@@ -108,7 +117,8 @@ int buscaLista(LISTA cab, int buscado) // busca la lista de forma iterativa
   return res;  
 }
 
-void incrementa(LISTA cab, int h) //incrementa los datos de forma iterativa
+//incrementa los datos de forma iterativa
+void incrementa(LISTA cab, int h) 
 {
   while (cab)
   {
@@ -118,7 +128,8 @@ void incrementa(LISTA cab, int h) //incrementa los datos de forma iterativa
   
 }
 
-int insRef(LISTA *cab, int dato, int ref) // inserta un valor ferenciando otro valor de forma iterativa
+// inserta un valor ferenciando otro valor de forma iterativa
+int insRef(LISTA *cab, int dato, int ref) 
 {
   int res = 0;
   LISTA aux, ant, nuevo;
@@ -146,7 +157,8 @@ int insRef(LISTA *cab, int dato, int ref) // inserta un valor ferenciando otro v
 
 //-----------------------------------------Recursividad-----------------------------//
 
-void sumaListaRec(LISTA cab, int *suma) //Costo de la lista recursivo
+//Costo de la lista recursivo
+void sumaListaRec(LISTA cab, int *suma) 
 {
   if(cab)
   {
@@ -157,7 +169,8 @@ void sumaListaRec(LISTA cab, int *suma) //Costo de la lista recursivo
     *suma = 0;
 }
 
-int sumaListaRec(LISTA cab) //Costo - suma de la lista recursivo
+//Costo - suma de la lista recursivo
+int sumaListaRec(LISTA cab) 
 {
   int suma;
   if(!cab)
@@ -167,7 +180,8 @@ int sumaListaRec(LISTA cab) //Costo - suma de la lista recursivo
   return suma;
 }
 
-void incrementaRec(LISTA cab, int h) //Incrementa los datos de la lista de forma recursiva
+//Incrementa los datos de la lista de forma recursiva
+void incrementaRec(LISTA cab, int h) 
 {
   if (cab)
   {
@@ -176,7 +190,8 @@ void incrementaRec(LISTA cab, int h) //Incrementa los datos de la lista de forma
   }
 }
 
-int busqRec(LISTA cab, int buscado) // Busca el valor por busqueda de ordenamiento de mandera recursiva
+// Busca el valor por busqueda de ordenamiento de mandera recursiva
+int busqRec(LISTA cab, int buscado) 
 {
   int res;
   if(!cab)
@@ -188,7 +203,8 @@ int busqRec(LISTA cab, int buscado) // Busca el valor por busqueda de ordenamien
       res = busqRec(cab->puntero, buscado);
 }
 
-int insFinal(LISTA *cab, int dato) // inserta final de forma iterativa
+// inserta final de forma iterativa
+int insFinal(LISTA *cab, int dato) 
 {
   int res;
   LISTA nuevo, aux;
@@ -207,7 +223,8 @@ int insFinal(LISTA *cab, int dato) // inserta final de forma iterativa
   return res;
 }
 
-int insFinalRec(LISTA *cab, int dato) // inserta en el final de forma recursiva
+// inserta en el final de forma recursiva
+int insFinalRec(LISTA *cab, int dato) 
 {
   int res;
 
@@ -219,7 +236,8 @@ int insFinalRec(LISTA *cab, int dato) // inserta en el final de forma recursiva
   return res;
 }
 
-int insRefRec(LISTA *cab, int dato, int ref) // inserta por referencia un valor y lo pone a la izquierda de manera recursiva
+// inserta por referencia de lado izquierdo un valor de manera recursiva
+int insRefRec(LISTA *cab, int dato, int ref) 
 {
   int res;
   LISTA nuevo;
@@ -239,7 +257,8 @@ int insRefRec(LISTA *cab, int dato, int ref) // inserta por referencia un valor 
   return res;
 }
 
-int insOrdenadaRec(LISTA *cab, int dato, int ref) // inserta de forma ordenada de manera recursiva
+// inserta de forma ordenada y de manera recursiva, regresa 0 si no se pudo insertar
+int insOrdenadaRec(LISTA *cab, int dato, int ref) 
 {
   int res;
   LISTA nuevo;
@@ -262,7 +281,8 @@ int insOrdenadaRec(LISTA *cab, int dato, int ref) // inserta de forma ordenada d
   return res;
 }
 
-int insOrdenadaSinRepetirRec(LISTA *cab, int dato, int ref) // inserta de forma ordenada sin repetir el valor de manera recursiva
+// inserta de forma ordenada sin repetir el valor de manera recursiva, regresa 0 si no se pudo insertar
+int insOrdenadaSinRepetirRec(LISTA *cab, int dato, int ref) 
 {
   int res;
   LISTA nuevo;
@@ -283,13 +303,14 @@ int insOrdenadaSinRepetirRec(LISTA *cab, int dato, int ref) // inserta de forma 
     }
   }
   else
-    res = insOrdenadaRec(&(*cab)->puntero, dato, ref);
+    res = insOrdenadaSinRepetirRec(&(*cab)->puntero, dato, ref);
   return res;
 }
 
 //--------------------------------------------Formas de eliminar nodos--------------------------------------------//
 
-int elimIni(LISTA *cab) // Retorna 0 si no se pudo eliminar si no retorna el dato que sacamos del nodo inicial
+// Retorna 0 si no se pudo eliminar si no retorna el dato que sacamos del nodo inicial
+int elimIni(LISTA *cab) 
 {
   int res = 0;
   LISTA aux;
@@ -304,43 +325,47 @@ int elimIni(LISTA *cab) // Retorna 0 si no se pudo eliminar si no retorna el dat
   return res;
 }
 
-int elimFin(LISTA *cab) // Retorna 0 si no se pudo eliminar si no retorna el dato que sacamos del nodo final
+// Retorna 0 si no se pudo eliminar si no retorna el dato que sacamos del nodo final
+int elimFin(LISTA cab) 
 {
   int res = 0;
   LISTA aux;
 
-  if(*cab)
+  if(cab)
   {
-    for(; *cab; *cab = (*cab)->puntero)
-      aux = *cab;
-    *cab = NULL;
-    res = (aux->puntero)->clientes;
-    free(aux);
+    for(; cab; cab = cab->puntero)
+      aux = cab;
+    aux->puntero = NULL;
+    res = (cab->puntero)->clientes;
+    free(cab);
   }
   return res;
 }
 
-int elimRef(LISTA *cab)
+// Retorna 0 si no se pudo elimina si no, retorna el dato que sacamos del nodo al que quiere eliminar
+int elimRef(LISTA *cab, int ref)
 {
   int res = 0;
-  LISTA aux, ant, nuevo;
+  LISTA aux, auxAux, nuevo;
 
   aux = *cab;
+
   while (aux && ref != aux->clientes)
-  {
-    ant = aux;
     aux = aux->puntero;
-  }
   if (aux)
   {
-    res = creaNodo(&nuevo, dato);
-    if(res)
+    if (aux == *cab)
     {
-      nuevo->puntero = aux;
-      if(*cab == aux)
-        *cab = nuevo;
-      else
-        ant->puntero = nuevo;
+      *cab = aux->puntero; //Tambien se puede usar elimIni
+      res = aux->clientes;
+      free(aux);
+    }
+    else
+    {
+      auxAux = aux;
+      aux = auxAux->puntero;
+      res = auxAux->clientes;
+      free(auxAux);
     }
   }
   return res;
