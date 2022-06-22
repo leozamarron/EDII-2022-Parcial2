@@ -3,8 +3,8 @@
 #include <stdlib.h>
 
 typedef struct nodo{
-  int clientes;
-  struct nodo *puntero;
+  int info;
+  struct nodo *sigNodo;
 }*LISTA;
 
 void iniLista(LISTA *cab);
@@ -33,8 +33,8 @@ int creaNodo(LISTA *cab, int dato) {
   *cab = (LISTA)malloc(sizeof(struct nodo));
 
   if (*cab) {
-    (*cab)->clientes = dato;
-    (*cab)->puntero = NULL;
+    (*cab)->info = dato;
+    (*cab)->sigNodo = NULL;
     res = 1;
   }
   return res;
@@ -46,7 +46,7 @@ int insIni(LISTA *cab, int dato) {
   LISTA nuevo;
   res = creaNodo(&nuevo, dato);
   if (res) {
-    nuevo->puntero = *cab;
+    nuevo->sigNodo = *cab;
     *cab = nuevo;
   }
   return res;
@@ -72,15 +72,15 @@ int capturaLista(LISTA *cab) {
 //Muestra la lista de forma iterativa
 void muestraLista(LISTA cab) 
 {
-  for(; cab; cab = cab->puntero)
-    printf("%d ", cab->clientes);
+  for(; cab; cab = cab->sigNodo)
+    printf("%d ", cab->info);
 }
 
 //Peso - cantidad de elementos
 int cuentaLista(LISTA cab) 
 {
   int i = 0;
-  for(; cab; i++, cab = cab->puntero);
+  for(; cab; i++, cab = cab->sigNodo);
   return i;
 }
 
@@ -89,8 +89,8 @@ int costo(LISTA cab)
 {
   int suma = 0;
 
-  for(; cab; cab = cab->puntero)
-    suma += cab->clientes;
+  for(; cab; cab = cab->sigNodo)
+    suma += cab->info;
   return suma;
 }
 
@@ -100,9 +100,9 @@ void costoListaCadena(LISTA cab, char *frase)
   frase[0] = '/0';
   while (cab)
   {
-    strcat(frase, cab->clientes);
+    strcat(frase, cab->info);
     strcat(frase, " ");
-    cab = cab->puntero;
+    cab = cab->sigNodo;
   }
 }
 
@@ -110,8 +110,8 @@ void costoListaCadena(LISTA cab, char *frase)
 int buscaLista(LISTA cab, int buscado)
 {
   int res = 0;
-  while (cab && buscado != cab->clientes)
-    cab = cab->puntero;
+  while (cab && buscado != cab->info)
+    cab = cab->sigNodo;
   if(cab)
     res = 1;
   return res;  
@@ -122,8 +122,8 @@ void incrementa(LISTA cab, int h)
 {
   while (cab)
   {
-    cab->clientes += h;
-    cab = cab->puntero;
+    cab->info += h;
+    cab = cab->sigNodo;
   }
   
 }
@@ -135,35 +135,37 @@ int insRef(LISTA *cab, int dato, int ref)
   LISTA aux, ant, nuevo;
 
   aux = *cab;
-  while (aux && ref != aux->clientes)
+  while (aux && ref != aux->info)
   {
     ant = aux;
-    aux = aux->puntero;
+    aux = aux->sigNodo;
   }
   if (aux)
   {
     res = creaNodo(&nuevo, dato);
     if(res)
     {
-      nuevo->puntero = aux;
+      nuevo->sigNodo = aux;
       if(*cab == aux)
         *cab = nuevo;
       else
-        ant->puntero = nuevo;
+        ant->sigNodo = nuevo;
     }
   }
   return res;
 }
 
-//-----------------------------------------Recursividad-----------------------------//
+//----------------------------------------------------------//
+//-------------------------Recursividad---------------------//
+//----------------------------------------------------------//
 
 //Costo de la lista recursivo
 void sumaListaRec(LISTA cab, int *suma) 
 {
   if(cab)
   {
-    sumaLista(cab->puntero, suma);
-    *suma += cab->clientes;
+    sumaLista(cab->sigNodo, suma);
+    *suma += cab->info;
   }
   else
     *suma = 0;
@@ -176,7 +178,7 @@ int sumaListaRec(LISTA cab)
   if(!cab)
     suma = 0;
   else
-    suma = cab->clientes + sumaLista(cab->puntero);
+    suma = cab->info + sumaLista(cab->sigNodo);
   return suma;
 }
 
@@ -185,8 +187,8 @@ void incrementaRec(LISTA cab, int h)
 {
   if (cab)
   {
-    cab->clientes += h;
-    incrementa(cab->puntero, h);
+    cab->info += h;
+    incrementa(cab->sigNodo, h);
   }
 }
 
@@ -197,10 +199,10 @@ int busqRec(LISTA cab, int buscado)
   if(!cab)
     res=0;
   else
-    if(buscado == cab->clientes)
+    if(buscado == cab->info)
       res = 1;
     else
-      res = busqRec(cab->puntero, buscado);
+      res = busqRec(cab->sigNodo, buscado);
 }
 
 // inserta final de forma iterativa
@@ -216,9 +218,9 @@ int insFinal(LISTA *cab, int dato)
     else
     {
       aux = *cab;
-      while(aux->puntero)
-        aux = aux->puntero;
-      aux->puntero = nuevo;
+      while(aux->sigNodo)
+        aux = aux->sigNodo;
+      aux->sigNodo = nuevo;
     }
   return res;
 }
@@ -231,7 +233,7 @@ int insFinalRec(LISTA *cab, int dato)
   if(!*cab)
     res = creaNodo(cab, dato);
   else  
-    res = insFinalRec(&(*cab)->puntero, dato);
+    res = insFinalRec(&(*cab)->sigNodo, dato);
 
   return res;
 }
@@ -243,17 +245,17 @@ int insRefRec(LISTA *cab, int dato, int ref)
   LISTA nuevo;
   if(!*cab)
     res = 0;
-  else if (ref == (*cab)->clientes)
+  else if (ref == (*cab)->info)
   {
     res = creaNodo(&nuevo, dato);
     if (res)
     {
-      nuevo->puntero = *cab;
+      nuevo->sigNodo = *cab;
       *cab = nuevo;
     }
   }
   else
-    res = insRefRec(&(*cab)->puntero, dato, ref);
+    res = insRefRec(&(*cab)->sigNodo, dato, ref);
   return res;
 }
 
@@ -267,17 +269,17 @@ int insOrdenadaRec(LISTA *cab, int dato, int ref)
     res = creaNodo(&nuevo, dato);
     *cab = nuevo;
   }
-  else if (ref > (*cab)->clientes)
+  else if (ref > (*cab)->info)
   {
     res = creaNodo(&nuevo, dato);
     if(res)
     {
-      nuevo->puntero = *cab;
+      nuevo->sigNodo = *cab;
       *cab = nuevo;
     }
   }
   else
-    res = insOrdenadaRec(&(*cab)->puntero, dato, ref);
+    res = insOrdenadaRec(&(*cab)->sigNodo, dato, ref);
   return res;
 }
 
@@ -291,23 +293,25 @@ int insOrdenadaSinRepetirRec(LISTA *cab, int dato, int ref)
     res = creaNodo(&nuevo, dato);
     *cab = nuevo;
   }
-  else if(ref == (*cab)->clientes)
+  else if(ref == (*cab)->info)
     res = 0;
-  else if(ref > (*cab)->clientes)
+  else if(ref > (*cab)->info)
   {
     res = creaNodo(&nuevo, dato);
     if(res)
     {
-      nuevo->puntero = *cab;
+      nuevo->sigNodo = *cab;
       *cab = nuevo;
     }
   }
   else
-    res = insOrdenadaSinRepetirRec(&(*cab)->puntero, dato, ref);
+    res = insOrdenadaSinRepetirRec(&(*cab)->sigNodo, dato, ref);
   return res;
 }
 
-//--------------------------------------------Formas de eliminar nodos--------------------------------------------//
+//--------------------------------------------------------//
+//-------------------Formas de eliminar nodos-------------//
+//--------------------------------------------------------//
 
 // Retorna 0 si no se pudo eliminar si no retorna el dato que sacamos del nodo inicial
 int elimIni(LISTA *cab) 
@@ -318,55 +322,324 @@ int elimIni(LISTA *cab)
   if(*cab)
   {
     aux = *cab;
-    *cab = aux->puntero;
-    res = aux->clientes;
+    *cab = aux->sigNodo;
+    res = aux->info;
     free(aux);
   }
   return res;
 }
 
 // Retorna 0 si no se pudo eliminar si no retorna el dato que sacamos del nodo final
-int elimFin(LISTA cab) 
-{
-  int res = 0;
-  LISTA aux;
 
-  if(cab)
+int elimFin(LISTA *cab)
+{
+    int res = 0;
+    LISTA aux, ant;
+    if(*cab)
+    {
+        aux = *cab;
+        while(aux->info)
+        {
+            ant = aux;
+            aux = aux->sigNodo;
+        }
+        if(*cab == aux)
+            *cab = NULL;
+        else
+           ant->sigNodo = NULL;
+        free(aux);
+        res = 1;
+    }
+    return res;
+}
+
+int elimFinRec(LISTA *cab)
+{
+    int res;
+    if(!*cab)
+        res = 0;
+    else if(!(*cab)->sigNodo)
+    {
+        free(*cab);
+        *cab = NULL;
+        res = 1;
+    }
+    else
+        res = elimFinRec (&(*cab)->sigNodo);
+    return res;
+}
+
+
+// Retorna 0 si no se pudo elimina si no, retorna el dato que sacamos del nodo al que quiere eliminar
+
+int elimRef(LISTA *cab, int ref)
+{
+    int res = 0;
+    LISTA aux, ant;
+    
+    aux = *cab;
+    while(aux && ref != aux->info)
+    {
+        ant = aux;
+        aux = aux->sigNodo;
+    }
+    if(aux)
+    {
+        if(aux == *cab)
+            *cab = aux->sigNodo;
+        else
+            ant->sigNodo = aux->sigNodo;
+        free(aux);
+        res = 1;
+    }
+    return res;
+}
+
+int elimRefRec(LISTA *cab, int ref)
+{
+    int res;
+    LISTA aux;
+    if(!*cab)
+        res = 0;
+    else if(ref == (*cab)->info)
+    {
+        aux = *cab;
+        *cab = aux->sigNodo;
+        free(aux);
+        res = 1;
+    }
+    else
+        res = elimRefRec (&(*cab)->sigNodo, ref);
+    return res;
+}
+
+int elimOrdenada(LISTA *cab, int ref)
+{
+    int res = 0;
+    LISTA aux, ant;
+    while(aux && ref>aux->info)
+    {
+        ant = aux;
+        aux = aux->sigNodo;
+    }
+    if(aux && ref == aux->info)
+    {
+        if(aux == *cab)
+            *cab = aux->sigNodo;
+        else
+            ant->sigNodo = aux->sigNodo;
+        free(aux);
+        res = 1;
+    }
+}
+
+int elimOrdRec(LISTA *cab, int ref)
+{
+    int res;
+    LISTA aux;
+    if(!*cab || ref < (*cab)->info)
+        res = 0;
+    else if(ref == (*cab)->info)
+    {
+        aux = *cab;
+        *cab = aux->sigNodo;
+        free(aux);
+        res = 1;
+    }
+    else
+        res = elimOrdRec (&(*cab)->sigNodo, ref);
+    return res;
+}
+
+//--------------------------------------------------------//
+//------------------------PILAS Y COLAS-------------------//
+//--------------------------------------------------------//
+
+typedef struct nodo{
+  int info;
+  struct nodo *sigNodo;
+}*FILA;
+
+typedef struct 
+{
+  FILA frente;
+  FILA final;
+}FILA_CA; //Filas agrupadas
+
+void iniQueueCA(FILA_CA *f)
+{
+  f->frente = f->final = NULL;
+}
+
+void eliminaQueueCA(FILA_CA *f, int *dato)
+{
+  FILA aux;
+  int res = 0;
+  if (f->frente)
   {
-    for(; cab; cab = cab->puntero)
-      aux = cab;
-    aux->puntero = NULL;
-    res = (cab->puntero)->clientes;
-    free(cab);
+    aux = f->frente;
+    f->frente = aux->sigNodo;
+    *dato = aux->info;
+    free (aux);
+    res = 1;
+    if(!f->frente)
+      f->final = f->frente;
   }
   return res;
 }
 
-// Retorna 0 si no se pudo elimina si no, retorna el dato que sacamos del nodo al que quiere eliminar
-int elimRef(LISTA *cab, int ref)
+//--------------------------------------------------------//
+//------------------------LISTAS DOBLES-------------------//
+//--------------------------------------------------------//
+
+typedef struct nodo2{
+  struct nodo *antNodo;
+  int info;
+  struct nodo *sigNodo;
+}*LISTA_DOBLE;
+
+typedef struct{
+  LISTA_DOBLE frente;
+  LISTA_DOBLE final;
+}FILA_CAB;
+
+void iniListaCS(LISTA_DOBLE *pri, LISTA_DOBLE *ult)
+{
+  *pri = *ult = NULL;
+}
+
+void iniListaCA(FILA_CAB *id)
+{
+  id->frente = id->final = NULL;
+}
+
+// Creacion de un nodo doble
+int creaNodo2(LISTA_DOBLE *nodo, int dato)
 {
   int res = 0;
-  LISTA aux, auxAux, nuevo;
+  *nodo = (LISTA_DOBLE)malloc(sizeof(struct nodo));
 
-  aux = *cab;
-
-  while (aux && ref != aux->clientes)
-    aux = aux->puntero;
-  if (aux)
+  if(*nodo)
   {
-    if (aux == *cab)
-    {
-      *cab = aux->puntero; //Tambien se puede usar elimIni
-      res = aux->clientes;
-      free(aux);
-    }
+    (*nodo)->antNodo = NULL;
+    (*nodo)-> sigNodo = NULL;
+    (*nodo)->info = dato;
+    res = 1;
+  }
+  return res;
+}
+
+int insIni(FILA_CAB *cab, int dato)
+{
+  int res;
+  LISTA_DOBLE nuevo;
+  res = cresNodo2(&nuevo, dato);
+  if (res)
+  {
+    nuevo->sigNodo = cab->frente;
+    if(!cab->frente)
+      cab->final = nuevo;
     else
+      cab->frente->antNodo = nuevo;
+      cab->frente = nuevo;
+  }
+  return res;
+}
+
+int insFin(FILA_CAB *cab, int dato)
+{
+  int res;
+  LISTA_DOBLE nuevo;
+  res = creaNodo2(&nuevo, dato);
+  if(res)
+  {
+    nuevo->antNodo = cab->final;
+    if(!cab->frente)
+      cab->frente = nuevo;
+    else 
+      cab->frente->sigNodo = nuevo;
+    cab->final = nuevo;
+  }
+  return res;
+}
+
+int insRef(FILA_CAB *cab, int dato, int ref)
+{
+  int res = 0;
+  LISTA_DOBLE aux, nuevo;
+
+  aux = cab->frente;
+  while (aux && res != aux->info)
+    aux = aux->sigNodo;
+  if(aux)
+  {
+    res = creaNodo2(&nuevo, dato);
+    if(res)
     {
-      auxAux = aux;
-      aux = auxAux->puntero;
-      res = auxAux->clientes;
-      free(auxAux);
+      nuevo->sigNodo = aux;
+      nuevo->antNodo = aux->antNodo;
+      aux->antNodo = nuevo;
+      if(cab->frente == aux)
+        cab->frente = nuevo;
+      else
+        nuevo->antNodo->sigNodo = nuevo;
     }
   }
   return res;
+}
+
+void recorre(FILA_CAB cab, int dir)
+{
+  LISTA_DOBLE aux;
+
+  aux = dir? cab.frente:cab.final;
+
+  while (aux)
+  {
+    printf("%d ", aux->info);
+    aux = dir? aux->sigNodo:aux->antNodo;
+  }
+}
+
+void recorre2(FILA_CAB cab)
+{
+  char resp;
+  LISTA_DOBLE aux;
+
+  aux = rand()%2? cab.frente:cab.final;
+
+  do
+  {
+    printf("%d\n", aux->info);
+    printf("Hacia donde?");
+    scanf(" %c", &resp); //i-izquierda, d-derecha, s-salida
+    if(resp == 'd' && aux->sigNodo)
+      aux = aux->sigNodo;
+    else if(resp == 'i' && aux->antNodo)
+      aux = aux->antNodo;
+  } while (resp != 's');
+}
+
+//--------------------------------------------------------//
+//----------------------LISTAS CIRCULARES-----------------//
+//--------------------------------------------------------//
+
+insIniCirc(LISTA *cab, int dato)
+{
+  int res;
+  LISTA nuevo, aux;
+  res = creaNodo(&nuevo, dato);
+  if(res)
+  {
+    nuevo->sigNodo = *cab;
+    if(!*cab)
+      nuevo->sigNodo = nuevo;
+    else{
+      aux = *cab;
+      while(aux->sigNodo != *cab)
+        aux = aux->sigNodo;
+      aux->sigNodo = nuevo;
+    }
+    *cab = nuevo;
+  }
 }

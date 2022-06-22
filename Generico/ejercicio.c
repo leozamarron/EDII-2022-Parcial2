@@ -29,3 +29,35 @@ int creaNodo(GEN *cab, char *nom, int tip) {
   }
   return res;
 }
+
+int sumaInt(GEN cab)
+{
+  if(cab->tipo == 2)
+  {
+    int res;
+    if (!cab)
+      res = 0;
+    else
+      res = (int*)cab->info + suma(cab->sigGen);
+    return res;
+  }
+}
+
+float sumaFloat(GEN cab)
+{
+  if(cab->tipo == 3)
+  {
+    int res;
+    if (!cab)
+      res = 0;
+    else
+      res = (float*)cab->info + suma(cab->sigGen);
+    return res;
+  }
+}
+
+float sumaTot(GEN cab)
+{
+  float sumaT = 1.0 * sumaInt(cab) + sumaFloat(cab);
+  return sumaT;
+}
