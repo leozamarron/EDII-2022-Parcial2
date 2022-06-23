@@ -48,6 +48,7 @@ int insIni(LISTA *cab, int dato) {
   if (res) {
     nuevo->sigNodo = *cab;
     *cab = nuevo;
+    res = 1;
   }
   return res;
 }
@@ -466,12 +467,24 @@ typedef struct
   FILA final;
 }FILA_CA; //Filas agrupadas
 
+int creaNodo(LISTA *cab, int dato) {
+  int res = 0;
+  *cab = (LISTA)malloc(sizeof(struct nodo));
+
+  if (*cab) {
+    (*cab)->info = dato;
+    (*cab)->sigNodo = NULL;
+    res = 1;
+  }
+  return res;
+}
+
 void iniQueueCA(FILA_CA *f)
 {
   f->frente = f->final = NULL;
 }
 
-void eliminaQueueCA(FILA_CA *f, int *dato)
+int eliminaQueueCA(FILA_CA *f, int *dato)
 {
   FILA aux;
   int res = 0;
@@ -517,7 +530,7 @@ void iniListaCA(FILA_CAB *id)
 int creaNodo2(LISTA_DOBLE *nodo, int dato)
 {
   int res = 0;
-  *nodo = (LISTA_DOBLE)malloc(sizeof(struct nodo));
+  *nodo = (LISTA_DOBLE)malloc(sizeof(struct nodo2));
 
   if(*nodo)
   {
@@ -533,7 +546,7 @@ int insIni(FILA_CAB *cab, int dato)
 {
   int res;
   LISTA_DOBLE nuevo;
-  res = cresNodo2(&nuevo, dato);
+  res = creNodo2(&nuevo, dato);
   if (res)
   {
     nuevo->sigNodo = cab->frente;
@@ -541,7 +554,7 @@ int insIni(FILA_CAB *cab, int dato)
       cab->final = nuevo;
     else
       cab->frente->antNodo = nuevo;
-      cab->frente = nuevo;
+    cab->frente = nuevo;
   }
   return res;
 }
@@ -557,7 +570,7 @@ int insFin(FILA_CAB *cab, int dato)
     if(!cab->frente)
       cab->frente = nuevo;
     else 
-      cab->frente->sigNodo = nuevo;
+      cab->final->sigNodo = nuevo;
     cab->final = nuevo;
   }
   return res;
@@ -624,7 +637,7 @@ void recorre2(FILA_CAB cab)
 //----------------------LISTAS CIRCULARES-----------------//
 //--------------------------------------------------------//
 
-insIniCirc(LISTA *cab, int dato)
+int insIniCirc(LISTA *cab, int dato)
 {
   int res;
   LISTA nuevo, aux;
